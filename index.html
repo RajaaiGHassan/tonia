@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .ar-content {
+            position: fixed;
+            display: none;
+            width: 90%;
+            max-width: 800px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            z-index: 99;
+        }
+
+        .video-container {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .close-btn {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Video Content (Marker 1) -->
+    <div id="content1" class="ar-content">
+        <span class="close-btn" onclick="hideContent('content1')">✕</span>
+        <div class="video-container">
+            <iframe width="100%" height="400" src="https://www.youtube.com/embed/QK7VSdn1TpE?autoplay=1" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Text Content (Marker 2) -->
+    <div id="content2" class="ar-content">
+        <span class="close-btn" onclick="hideContent('content2')">✕</span>
+        <h2>TERPENIC ARBOL DEL TE BIO</h2>
+        <p style="font-family: Arial, sans-serif; line-height: 1.6; font-size: 16px; color: #333;">
+
+            <strong style="color: #2b7a78;">Terpenic Árbol Del Té Bio 30 ml.</strong> El Árbol del té pertenece a la
+            familia de las
+            <em>Mirtáceas</em>. Es un árbol pequeño, con hojas en forma de agujas y flores
+            <span style="color: #3a3a3a;">amarillas</span>,
+            <span style="color: #999;">blancas</span> o de
+            <span style="color: purple;">color púrpura</span>.
+
+            <br><br>
+
+            Nuestro conocimiento sobre las propiedades y usos del árbol del té procede de la amplia tradición recogida
+            durante miles de años;
+            los aborígenes australianos ya lo utilizaban.
+
+            <br><br>
+
+            <strong>Obtención del aceite esencial:</strong>
+            se obtiene por <em>destilación con arrastre de vapor</em> de las hojas.
+
+            <br><br>
+
+            <strong style="color: #2c3e50;">Moléculas principales (intervalos de %):</strong><br>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li><strong>Terpinen-4-ol:</strong> 30–48%</li>
+                <li><strong>1.8 cineol:</strong> ≤15%</li>
+            </ul>
+
+            <br>
+
+            <strong style="color: #2c3e50;">Propiedades:</strong>
+            <ul style="margin: 0; padding-left: 20px;">
+                <li>Antibacteriano</li>
+                <li>Antibiótico</li>
+                <li>Antifúngico</li>
+                <li>Inmunoestimulante</li>
+                <li>Antioxidante</li>
+            </ul>
+
+            <br>
+
+            <span style="font-style: italic;">Terpenic Árbol Del Té Bio 30 ml</span> lo podrá encontrar en nuestra
+            farmacia online
+            <strong style="color: #0077cc;">Farmavázquez</strong>.
+            </p>
+
+    </div>
+
+    <!-- Text Content (Marker 3) -->
+    <div id="content3" class="ar-content">
+        <span class="close-btn" onclick="hideContent('content3')">✕</span>
+        <h2>Propolaid Pastillas Blandas Suizas Eucalipto</h2>
+        <p style="font-family: Arial, sans-serif; line-height: 1.6; font-size: 16px; color: #333;">
+
+            <strong style="color: #2b7a78;">Con Própolis y Eucalipto:</strong> Fórmula con extracto de própolis y
+            aceites esenciales de
+            <em>eucalipto</em>, <em>pino silvestre</em> y <em>menta</em>, conocidos por su efecto balsámico y
+            refrescante.
+
+            <br><br>
+
+            <strong>Frescura inmediata:</strong> El aceite esencial de menta proporciona una agradable sensación de
+            frescura en la cavidad bucal.
+
+            <br><br>
+
+            <strong style="color: #2c3e50;">SIN AZÚCARES AÑADIDOS</strong> – Endulzado con <em>estevia</em> y otros
+            edulcorantes para un sabor agradable sin azúcar.
+
+            <br><br>
+
+            <strong>Fácil consumo:</strong> Comprimidos blandos suizos que se disuelven lentamente en la boca, ideales
+            para adultos y adolescentes.
+
+            <br><br>
+
+            <strong>Formato práctico:</strong> Envase de 50 g con aproximadamente 50 comprimidos, para llevar siempre
+            contigo.
+        </p>
+
+    </div>
+
+    <a-scene mindar-image="imageTargetSrc: targets.mind;" vr-mode-ui="enabled: false">
+
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+        <!-- Marker Triggers -->
+        <a-entity mindar-image-target="targetIndex: 0"></a-entity>
+        <a-entity mindar-image-target="targetIndex: 1"></a-entity>
+        <a-entity mindar-image-target="targetIndex: 2"></a-entity>
+    </a-scene>
+
+    <script>
+        let currentContent = null;
+
+        // Show content when marker is found
+        document.querySelector('a-scene').addEventListener('targetFound', (e) => {
+            const targetIndex = e.target.getAttribute('mindar-image-target').targetIndex;
+            const contentId = `content${targetIndex + 1}`;
+
+            // Hide previous content if different
+            if (currentContent && currentContent !== contentId) {
+                hideContent(currentContent);
+            }
+
+            // Show new content
+            currentContent = contentId;
+            document.getElementById(contentId).style.display = 'block';
+        });
+
+        function hideContent(id) {
+            document.getElementById(id).style.display = 'none';
+            if (currentContent === id) currentContent = null;
+        }
+    </script>
+</body>
+
+</html>
